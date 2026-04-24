@@ -1,0 +1,13 @@
+{
+	"$schema": "../../umbraco-package-schema.json",
+	"name": "VNS Umbraco Extensions",
+	"version": "1.0.0",
+	"extensions": [
+		{
+			"type": "bundle",
+			"alias": "VNS.Umbraco.Extensions.Bundle.Ufm",
+			"name": "VNS Umbraco Extensions UFM Bundle",
+			"js": "/App_Plugins/VNS.Umbraco.Extensions/dist/umbraco-package.js"
+		}
+	]
+}
