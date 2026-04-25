@@ -66,7 +66,7 @@ ${value | dateFormat:HH:mm}
 ${value | dateFormat:dd.MM.yyyy HH:mm}
 ```
 
-## `dateFormat` Filter
+## `DateFormat` Filter
 
 Supported formats:
 
@@ -81,7 +81,7 @@ Input types:
 - JavaScript `Date`
 - Object with `{ date, timeZone }`
 
-## `badge` Component
+## `Badge` Component
 
 Syntax:
 
@@ -109,7 +109,7 @@ Examples:
 
 Note: UFM filters such as `stripHtml`/`truncate` are not piped onto component output. If needed, add component-specific options.
 
-## `media` Component
+## `Media` Component
 
 Syntax:
 
