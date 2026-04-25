@@ -5,6 +5,7 @@ import { customElement, html, nothing } from '@umbraco-cms/backoffice/external/l
 type UuiTagColor = 'default' | 'positive' | 'warning' | 'danger';
 type UuiTagLook = 'default' | 'primary' | 'secondary' | 'outline' | 'placeholder';
 type BadgeSize = 'xsmall' | 'small' | 'medium' | 'large';
+const BADGE_BASELINE_OFFSET_STYLE = 'position:relative;top:-1px;';
 
 function isHex(value: string | undefined): value is string {
   return !!value && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(value.trim());
@@ -63,6 +64,7 @@ export class UfmBadgeElement extends UmbLitElement {
     }
 
     const sizeStyle = this.size ? (SIZE_STYLES[this.size] ?? '') : '';
+    const badgeStyle = `${BADGE_BASELINE_OFFSET_STYLE}${sizeStyle}`;
 
     if (isHex(this.color)) {
       const bgColor = this.color;
@@ -77,14 +79,14 @@ export class UfmBadgeElement extends UmbLitElement {
         'font-size:12px',
         'font-weight:500',
         'line-height:1.6',
-        sizeStyle
+        badgeStyle
       ]
         .filter(Boolean)
         .join(';');
       return html`<span style=${hexStyle}>${this._text}</span>`;
     }
 
-    return html`<uui-tag color=${this.color ?? 'default'} look=${this.look ?? 'secondary'} style=${sizeStyle}>${this._text}</uui-tag>`;
+    return html`<uui-tag color=${this.color ?? 'default'} look=${this.look ?? 'secondary'} style=${badgeStyle}>${this._text}</uui-tag>`;
   }
 }
 

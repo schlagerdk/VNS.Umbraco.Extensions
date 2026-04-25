@@ -62,7 +62,16 @@ function formatDate(date, format, timeZone) {
         return new Intl.DateTimeFormat(undefined, { ...LONG_OPTIONS, ...options }).format(date);
     }
     if (normalizedFormat === 'monthyear') {
-        return new Intl.DateTimeFormat(undefined, { ...MONTH_YEAR_OPTIONS, ...options }).format(date);
+        return formatMonthYearTitleCase(date, timeZone);
+    }
+    if (normalizedFormat === 'monthname') {
+        return getDateParts(date, timeZone).monthLong;
+    }
+    if (normalizedFormat === 'weekdayname') {
+        return getDateParts(date, timeZone).weekdayLong;
+    }
+    if (normalizedFormat === 'weeknumber' || normalizedFormat === 'week') {
+        return getDateParts(date, timeZone).week;
     }
     return formatCustomDate(date, format, timeZone);
 }
@@ -73,6 +82,10 @@ function formatCustomDate(date, format, timeZone) {
         yy: parts.year.slice(-2),
         MMMM: parts.monthLong,
         MMM: parts.monthShort,
+        dddd: parts.weekdayLong,
+        ddd: parts.weekdayShort,
+        ww: parts.week,
+        w: String(Number(parts.week)),
         MM: parts.month,
         M: String(Number(parts.month)),
         dd: parts.day,
@@ -84,7 +97,7 @@ function formatCustomDate(date, format, timeZone) {
         ss: parts.second,
         s: String(Number(parts.second))
     };
-    return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|HH|H|mm|m|ss|s/g, (token) => tokenMap[token] ?? token);
+    return format.replace(/yyyy|yy|MMMM|MMM|dddd|ddd|ww|w|MM|M|dd|d|HH|H|mm|m|ss|s/g, (token) => tokenMap[token] ?? token);
 }
 function getDateParts(date, timeZone) {
     const commonOptions = {
@@ -111,16 +124,55 @@ function getDateParts(date, timeZone) {
         timeZone,
         month: 'long'
     }).format(date);
+    const weekdayShort = new Intl.DateTimeFormat(undefined, {
+        timeZone,
+        weekday: 'short'
+    }).format(date);
+    const weekdayLong = new Intl.DateTimeFormat(undefined, {
+        timeZone,
+        weekday: 'long'
+    }).format(date);
+    const year = getPart(dateParts, 'year');
+    const month = getPart(dateParts, 'month');
+    const day = getPart(dateParts, 'day');
+    const week = getIsoWeekNumber(Number(year), Number(month), Number(day));
     return {
-        year: getPart(dateParts, 'year'),
-        month: getPart(dateParts, 'month'),
-        day: getPart(dateParts, 'day'),
+        year,
+        month,
+        day,
         hour: getPart(timeParts, 'hour'),
         minute: getPart(timeParts, 'minute'),
         second: getPart(timeParts, 'second'),
-        monthShort,
-        monthLong
+        monthShort: toTitleCase(monthShort),
+        monthLong: toTitleCase(monthLong),
+        weekdayShort: toTitleCase(weekdayShort),
+        weekdayLong: toTitleCase(weekdayLong),
+        week: String(week).padStart(2, '0')
     };
+}
+function getIsoWeekNumber(year, month, day) {
+    const utcDate = new Date(Date.UTC(year, month - 1, day));
+    const weekday = utcDate.getUTCDay() || 7;
+    // Shift to Thursday to determine ISO week in year boundaries.
+    utcDate.setUTCDate(utcDate.getUTCDate() + 4 - weekday);
+    const yearStart = new Date(Date.UTC(utcDate.getUTCFullYear(), 0, 1));
+    return Math.ceil((((utcDate.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+}
+function toTitleCase(value) {
+    if (!value) {
+        return value;
+    }
+    return value.charAt(0).toLocaleUpperCase() + value.slice(1);
+}
+function formatMonthYearTitleCase(date, timeZone) {
+    const formatter = new Intl.DateTimeFormat(undefined, {
+        ...MONTH_YEAR_OPTIONS,
+        ...(timeZone ? { timeZone } : undefined)
+    });
+    const parts = formatter.formatToParts(date);
+    return parts
+        .map((part) => (part.type === 'month' ? toTitleCase(part.value) : part.value))
+        .join('');
 }
 function getPart(parts, type) {
     const value = parts.find((part) => part.type === type)?.value;

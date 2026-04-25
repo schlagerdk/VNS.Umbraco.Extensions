@@ -54,6 +54,9 @@ src/
 {= dateAndTime | dateFormat:dd-MM-yyyy}
 {= dateAndTime | dateFormat:HH:mm}
 {umbValue:dateAndTime | dateFormat:monthYear}
+{umbValue:dateAndTime | dateFormat:monthName}
+{umbValue:dateAndTime | dateFormat:weekdayName}
+{umbValue:dateAndTime | dateFormat:weekNumber}
 ```
 
 ### List View Columns
@@ -73,7 +76,12 @@ Supported formats:
 - `short`
 - `long`
 - `monthYear`
-- Custom tokens: `yyyy`, `yy`, `MMMM`, `MMM`, `MM`, `M`, `dd`, `d`, `HH`, `H`, `mm`, `m`, `ss`, `s`
+- `monthName` (title case)
+- `weekdayName` (title case)
+- `weekNumber` / `week` (ISO week, padded to 2 digits)
+- Custom tokens: `yyyy`, `yy`, `MMMM`, `MMM`, `dddd`, `ddd`, `ww`, `w`, `MM`, `M`, `dd`, `d`, `HH`, `H`, `mm`, `m`, `ss`, `s`
+
+Note: month and weekday names are returned in title case (including `monthYear`, for example `April 2026` and `Mandag`).
 
 Input types:
 
