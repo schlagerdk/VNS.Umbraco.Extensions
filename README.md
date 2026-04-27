@@ -21,7 +21,7 @@ npm run build
 3. Restart Umbraco (or recycle the app pool).
 4. Hard refresh the browser cache.
 
-Build output is written to `App_Plugins/VNS.Umbraco.Extensions/dist`.
+Build output is written to `dist/` and then synced to `App_Plugins/VNS.Umbraco.Extensions/`.
 
 ## Project Structure
 
@@ -137,7 +137,7 @@ Behavior:
 
 Quick checks:
 
-1. Confirm `App_Plugins/VNS.Umbraco.Extensions/dist/umbraco-package.js` is deployed.
+1. Confirm `App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js` is deployed.
 2. Check browser console for JS errors.
 3. Verify `umbraco-package.js` is loaded in the network tab.
 4. Restart Umbraco and hard refresh.

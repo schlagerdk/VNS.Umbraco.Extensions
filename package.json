@@ -1,11 +1,13 @@
 {
 	"name": "vns-umbraco-extensions-ufm",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"private": true,
 	"description": "Isolated Umbraco 17 backoffice extension package with custom UFM filters and components (dateFormat filter, badge component, etc).",
 	"type": "module",
 	"scripts": {
-		"build": "tsc -p tsconfig.json",
+		"clean": "rm -rf dist App_Plugins/VNS.Umbraco.Extensions/dist App_Plugins/VNS.Umbraco.Extensions/UFM App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js.map App_Plugins/VNS.Umbraco.Extensions/manifests.js App_Plugins/VNS.Umbraco.Extensions/manifests.js.map",
+		"sync:app-plugins": "mkdir -p App_Plugins/VNS.Umbraco.Extensions && cp -R dist/* App_Plugins/VNS.Umbraco.Extensions/",
+		"build": "npm run clean && tsc -p tsconfig.json && npm run sync:app-plugins",
 		"watch": "tsc -p tsconfig.json --watch",
 		"version:sync": "node scripts/sync-version.mjs",
 		"version:patch": "npm version patch --no-git-tag-version && npm run version:sync",
