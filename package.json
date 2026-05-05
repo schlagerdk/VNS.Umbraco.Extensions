@@ -1,6 +1,6 @@
 {
 	"name": "vns-umbraco-extensions-ufm",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"private": true,
 	"description": "Isolated Umbraco 17 backoffice extension package with custom UFM filters and components (dateFormat filter, badge component, etc).",
 	"type": "module",

@@ -9,6 +9,15 @@ export const manifests = [
         }
     },
     {
+        type: 'ufmFilter',
+        alias: 'VNS.Umbraco.Extensions.UfmFilter.TagsFormat',
+        name: 'Tags Format UFM Filter',
+        api: () => import('./UFM/Filters/TagsFormat/index.js'),
+        meta: {
+            alias: 'tagsFormat'
+        }
+    },
+    {
         type: 'ufmComponent',
         alias: 'VNS.Umbraco.Extensions.UfmComponent.Badge',
         name: 'Badge UFM Component',

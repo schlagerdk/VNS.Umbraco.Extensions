@@ -65,25 +65,40 @@ let UfmBadgeElement = (() => {
             color: { type: String },
             look: { type: String },
             size: { type: String },
+            mode: { type: String },
+            separator: { type: String },
             _show: { state: true },
-            _text: { state: true }
+            _text: { state: true },
+            _items: { state: true }
         };
         alias;
         display;
         color;
         look;
         size;
+        mode;
+        separator;
         _show = false;
         _text = '';
+        _items = [];
         constructor() {
             super();
             this.consumeContext(UMB_UFM_RENDER_CONTEXT, (context) => {
                 this.observe(context?.value, (value) => {
                     const sourceValue = this.alias ? getAliasValue(value, this.alias) : value;
+                    if (this.mode === 'tags') {
+                        const items = toTagItems(sourceValue, this.separator);
+                        this._items = items;
+                        this._text = '';
+                        this._show = items.length > 0;
+                        this.requestUpdate();
+                        return;
+                    }
                     const isVisible = hasDisplayableValue(sourceValue);
                     const text = this.display?.trim() || toDisplayText(sourceValue);
                     this._show = isVisible && text.length > 0;
                     this._text = text;
+                    this._items = [];
                     this.requestUpdate();
                 }, 'observeBadgeValue');
             });
@@ -94,6 +109,28 @@ let UfmBadgeElement = (() => {
             }
             const sizeStyle = this.size ? (SIZE_STYLES[this.size] ?? '') : '';
             const badgeStyle = `${BADGE_BASELINE_OFFSET_STYLE}${sizeStyle}`;
+            if (this.mode === 'tags') {
+                if (isHex(this.color)) {
+                    const bgColor = this.color;
+                    const textColor = isHex(this.look) ? this.look : '#ffffff';
+                    const hexStyle = [
+                        `background:${bgColor}`,
+                        `color:${textColor}`,
+                        'display:inline-flex',
+                        'align-items:center',
+                        'border-radius:3px',
+                        'padding:0 6px',
+                        'font-size:12px',
+                        'font-weight:500',
+                        'line-height:1.6',
+                        badgeStyle
+                    ]
+                        .filter(Boolean)
+                        .join(';');
+                    return html `${this._items.map((item) => html `<span style=${`${hexStyle};margin-right:6px;`}>${item}</span>`)}`;
+                }
+                return html `${this._items.map((item) => html `<uui-tag color=${this.color ?? 'default'} look=${this.look ?? 'secondary'} style=${`${badgeStyle};margin-right:6px;`}>${item}</uui-tag>`)}`;
+            }
             if (isHex(this.color)) {
                 const bgColor = this.color;
                 const textColor = isHex(this.look) ? this.look : '#ffffff';
@@ -172,6 +209,73 @@ function toDisplayText(value) {
         return String(value);
     }
     return '';
+}
+function toTagItems(value, separator) {
+    const separatorValue = separator && separator.length > 0 ? separator : ',';
+    if (Array.isArray(value)) {
+        return value
+            .map((item) => extractTagText(item))
+            .filter((item) => !!item);
+    }
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        if (!trimmed) {
+            return [];
+        }
+        const jsonParsed = tryParseJson(trimmed);
+        if (jsonParsed !== undefined) {
+            return toTagItems(jsonParsed, separatorValue);
+        }
+        if (trimmed.includes(separatorValue)) {
+            return trimmed
+                .split(separatorValue)
+                .map((item) => item.trim())
+                .filter((item) => item.length > 0);
+        }
+        return [trimmed];
+    }
+    if (value && typeof value === 'object') {
+        const objectValue = value;
+        if (Array.isArray(objectValue.tags)) {
+            return objectValue.tags
+                .map((item) => extractTagText(item))
+                .filter((item) => !!item);
+        }
+        const item = extractTagText(value);
+        return item ? [item] : [];
+    }
+    return [];
+}
+function extractTagText(value) {
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        return trimmed.length > 0 ? trimmed : null;
+    }
+    if (value && typeof value === 'object') {
+        const item = value;
+        const candidates = [item.value, item.tag, item.text, item.name];
+        for (const candidate of candidates) {
+            if (typeof candidate === 'string') {
+                const trimmed = candidate.trim();
+                if (trimmed.length > 0) {
+                    return trimmed;
+                }
+            }
+        }
+    }
+    return null;
+}
+function tryParseJson(value) {
+    const startsAsJson = value.startsWith('[') || value.startsWith('{');
+    if (!startsAsJson) {
+        return undefined;
+    }
+    try {
+        return JSON.parse(value);
+    }
+    catch {
+        return undefined;
+    }
 }
 export { UfmBadgeElement as element };
 //# sourceMappingURL=badge.element.js.map

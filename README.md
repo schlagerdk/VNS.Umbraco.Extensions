@@ -5,6 +5,7 @@ A backoffice extension package for Umbraco 17 that adds reusable UFM filters and
 ## Features
 
 - `dateFormat` UFM filter
+- `tagsFormat` UFM filter (handles both JSON and CSV tag storage)
 - `badge` UFM component
 - `media` UFM component (renders full media path)
 
@@ -29,8 +30,11 @@ Build output is written to `dist/` and then synced to `App_Plugins/VNS.Umbraco.E
 src/
 ├── UFM/
 │   ├── Filters/
-│   │   └── DateFormat/
-│   │       ├── date-format.filter.ts
+│   │   ├── DateFormat/
+│   │   │   ├── date-format.filter.ts
+│   │   │   └── index.ts
+│   │   └── TagsFormat/
+│   │       ├── tags-format.filter.ts
 │   │       └── index.ts
 │   ├── Components/
 │   │   ├── Badge/
@@ -57,6 +61,8 @@ src/
 {umbValue:dateAndTime | dateFormat:monthName}
 {umbValue:dateAndTime | dateFormat:weekdayName}
 {umbValue:dateAndTime | dateFormat:weekNumber}
+{umbValue:tags | tagsFormat}
+{umbValue:tags | tagsFormat: · }
 ```
 
 ### List View Columns
@@ -64,9 +70,10 @@ src/
 Use `value` in list view templates:
 
 ```text
-${value | dateFormat:dd.MM.yyyy}
-${value | dateFormat:HH:mm}
-${value | dateFormat:dd.MM.yyyy HH:mm}
+{umbValue:value | dateFormat:dd.MM.yyyy}
+{umbValue:value | dateFormat:HH:mm}
+{umbValue:value | dateFormat:dd.MM.yyyy HH:mm}
+{umbValue:value | tagsFormat}
 ```
 
 ## `DateFormat` Filter
@@ -86,15 +93,38 @@ Note: month and weekday names are returned in title case (including `monthYear`,
 Input types:
 
 - ISO date string
+- Localized system date string (for example `5.5.2026, 10.25.15`)
 - JavaScript `Date`
 - Object with `{ date, timeZone }`
+
+## `TagsFormat` Filter
+
+Use to normalize tags output to readable separated text.
+
+Syntax:
+
+```text
+{umbValue:value | tagsFormat}
+{umbValue:value | tagsFormat: · }
+{umbValue:value | tagsFormat:, :;}
+```
+
+Arguments:
+
+- First arg: output separator (default `, `)
+- Second arg: input separator when source is CSV (default `,`)
+
+Examples:
+
+- JSON `["news","featured"]` -> `news, featured`
+- CSV `news,featured` -> `news, featured`
 
 ## `Badge` Component
 
 Syntax:
 
 ```text
-{badge:alias:display:color:look:size}
+{badge:alias:display:color:look:size:mode:separator}
 ```
 
 Parameters:
@@ -104,6 +134,8 @@ Parameters:
 - `color` (optional): `default`, `positive`, `warning`, `danger`, or hex (`#rgb`, `#rrggbb`, `#rrggbbaa`)
 - `look` (optional): `default`, `primary`, `secondary`, `outline`, `placeholder`, or hex text color when using hex `color`
 - `size` (optional): `xsmall`, `small`, `medium` (default), `large`
+- `mode` (optional): `single` (default) or `tags`
+- `separator` (optional): input separator for `mode:tags` (default `,`)
 
 Examples:
 
@@ -113,7 +145,13 @@ Examples:
 {badge:isSoldOut:SOLD OUT:danger:default}
 {badge:isFree:FREE:#27ae60:#ffffff}
 {badge:stage:::#1a1a2e:#e94560:xsmall}
+{badge:myTags:::secondary:small:tags}
 ```
+
+When `mode` is `tags`, the component renders one badge per tag entry and supports:
+
+- JSON arrays (default Umbraco tags cache format)
+- CSV strings (`tag1,tag2,tag3`)
 
 Note: UFM filters such as `stripHtml`/`truncate` are not piped onto component output. If needed, add component-specific options.
 

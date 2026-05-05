@@ -266,6 +266,11 @@ function parseDateString(value: string): Date {
     return fromDanishLike;
   }
 
+  const fromLocalizedDotFormat = parseLocalizedDotDateTimeString(normalized);
+  if (fromLocalizedDotFormat) {
+    return fromLocalizedDotFormat;
+  }
+
   return new Date(Number.NaN);
 }
 
@@ -315,6 +320,17 @@ function parseIsoLikeString(value: string): Date | null {
 
 function parseDanishLikeString(value: string): Date | null {
   const match = value.match(/^(\d{2})-(\d{2})-(\d{4})(?:[T\s](\d{2}):(\d{2})(?::(\d{2}))?)?$/);
+  if (!match) {
+    return null;
+  }
+
+  const [, d, m, y, hh = '00', mm = '00', ss = '00'] = match;
+  const localDate = new Date(Number(y), Number(m) - 1, Number(d), Number(hh), Number(mm), Number(ss));
+  return isValidDate(localDate) ? localDate : null;
+}
+
+function parseLocalizedDotDateTimeString(value: string): Date | null {
+  const match = value.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(?:,?\s+(\d{1,2})\.(\d{2})(?:\.(\d{2}))?)?$/);
   if (!match) {
     return null;
   }

@@ -11,9 +11,9 @@ function parseBadgeAttributes(text: string): string | null {
   const filters = pipeIndex === -1 ? null : text.substring(pipeIndex + 1).trim();
 
   const parts = left.split(':').map((part) => part.trim());
-  const [alias, display, color, look, size] = parts;
+  const [alias, display, color, look, size, mode, separator] = parts;
 
-  return Object.entries({ alias, filters, display, color, look, size })
+  return Object.entries({ alias, filters, display, color, look, size, mode, separator })
     .map(([key, value]) => (value ? `${key}="${value}"` : null))
     .filter((item) => item)
     .join(' ');
