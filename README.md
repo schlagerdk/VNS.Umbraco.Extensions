@@ -129,7 +129,7 @@ Syntax:
 
 Parameters:
 
-- `alias` (required): Property alias (or `$settings.someAlias`)
+- `alias` (required): Property alias (or `$settings.someAlias`). Supports fallback with `??`, for example `stage??ALL`. Fallback is used when the resolved value is `null`, `undefined`, or blank text.
 - `display` (optional): Static text shown in badge
 - `color` (optional): `default`, `positive`, `warning`, `danger`, or hex (`#rgb`, `#rrggbb`, `#rrggbbaa`)
 - `look` (optional): `default`, `primary`, `secondary`, `outline`, `placeholder`, or hex text color when using hex `color`
@@ -142,6 +142,7 @@ Examples:
 ```text
 {badge:isFree:FREE:positive:secondary}
 {badge:stage}
+{badge:stage??ALL:::outline:medium:}
 {badge:isSoldOut:SOLD OUT:danger:default}
 {badge:isFree:FREE:#27ae60:#ffffff}
 {badge:stage:::#1a1a2e:#e94560:xsmall}
@@ -162,6 +163,8 @@ Syntax:
 ```text
 {media:alias}
 ```
+
+`alias` also supports fallback with `??`, for example `{media:heroImage??fallbackImage}`. Fallback is used when the resolved value is `null`, `undefined`, or blank text.
 
 Behavior:
 

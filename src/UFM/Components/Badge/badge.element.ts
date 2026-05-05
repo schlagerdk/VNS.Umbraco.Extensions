@@ -2,6 +2,8 @@ import { UMB_UFM_RENDER_CONTEXT } from '@umbraco-cms/backoffice/ufm';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { customElement, html, nothing } from '@umbraco-cms/backoffice/external/lit';
 
+import { getAliasValue } from '../../shared/alias-value.js';
+
 type UuiTagColor = 'default' | 'positive' | 'warning' | 'danger';
 type UuiTagLook = 'default' | 'primary' | 'secondary' | 'outline' | 'placeholder';
 type BadgeSize = 'xsmall' | 'small' | 'medium' | 'large';
@@ -133,32 +135,6 @@ export class UfmBadgeElement extends UmbLitElement {
 
     return html`<uui-tag color=${this.color ?? 'default'} look=${this.look ?? 'secondary'} style=${badgeStyle}>${this._text}</uui-tag>`;
   }
-}
-
-function getAliasValue(value: unknown, alias: string): unknown {
-  if (!value || typeof value !== 'object') {
-    return undefined;
-  }
-
-  const model = value as Record<string, unknown>;
-  const settings = (model.$settings as Record<string, unknown> | undefined) ?? {};
-
-  if (alias.startsWith('$settings.')) {
-    const settingsPath = alias.replace('$settings.', '');
-    return resolvePath(settings, settingsPath);
-  }
-
-  return resolvePath(model, alias) ?? settings[alias];
-}
-
-function resolvePath(source: Record<string, unknown>, path: string): unknown {
-  return path.split('.').reduce<unknown>((current, segment) => {
-    if (!current || typeof current !== 'object') {
-      return undefined;
-    }
-
-    return (current as Record<string, unknown>)[segment];
-  }, source);
 }
 
 function hasDisplayableValue(value: unknown): boolean {

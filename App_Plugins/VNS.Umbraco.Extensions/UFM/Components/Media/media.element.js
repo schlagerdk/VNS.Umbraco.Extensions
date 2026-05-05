@@ -36,6 +36,7 @@ import { UMB_UFM_RENDER_CONTEXT } from '@umbraco-cms/backoffice/ufm';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbMediaDetailRepository, UmbMediaTreeRepository } from '@umbraco-cms/backoffice/media';
 import { customElement, html, nothing } from '@umbraco-cms/backoffice/external/lit';
+import { getAliasValue } from '../../shared/alias-value.js';
 let UfmMediaElement = (() => {
     let _classDecorators = [customElement('ufm-media')];
     let _classDescriptor;
@@ -139,24 +140,6 @@ function parseMediaKey(raw) {
         }
     }
     return undefined;
-}
-function getAliasValue(value, alias) {
-    if (!value || typeof value !== 'object')
-        return undefined;
-    const model = value;
-    const settings = model.$settings ?? {};
-    if (alias.startsWith('$settings.')) {
-        const path = alias.replace('$settings.', '');
-        return resolvePath(settings, path);
-    }
-    return resolvePath(model, alias) ?? settings[alias];
-}
-function resolvePath(source, path) {
-    return path.split('.').reduce((current, segment) => {
-        if (!current || typeof current !== 'object')
-            return undefined;
-        return current[segment];
-    }, source);
 }
 export { UfmMediaElement as element };
 //# sourceMappingURL=media.element.js.map

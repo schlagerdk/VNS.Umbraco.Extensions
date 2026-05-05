@@ -3,6 +3,8 @@ import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbMediaDetailRepository, UmbMediaTreeRepository } from '@umbraco-cms/backoffice/media';
 import { customElement, html, nothing } from '@umbraco-cms/backoffice/external/lit';
 
+import { getAliasValue } from '../../shared/alias-value.js';
+
 @customElement('ufm-media')
 export class UfmMediaElement extends UmbLitElement {
   static override properties = {
@@ -105,27 +107,6 @@ function parseMediaKey(raw: unknown): string | undefined {
   }
 
   return undefined;
-}
-
-function getAliasValue(value: unknown, alias: string): unknown {
-  if (!value || typeof value !== 'object') return undefined;
-
-  const model = value as Record<string, unknown>;
-  const settings = (model.$settings as Record<string, unknown> | undefined) ?? {};
-
-  if (alias.startsWith('$settings.')) {
-    const path = alias.replace('$settings.', '');
-    return resolvePath(settings, path);
-  }
-
-  return resolvePath(model, alias) ?? settings[alias];
-}
-
-function resolvePath(source: Record<string, unknown>, path: string): unknown {
-  return path.split('.').reduce<unknown>((current, segment) => {
-    if (!current || typeof current !== 'object') return undefined;
-    return (current as Record<string, unknown>)[segment];
-  }, source);
 }
 
 export { UfmMediaElement as element };
