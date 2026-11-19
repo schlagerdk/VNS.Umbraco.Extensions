@@ -11,43 +11,53 @@ A backoffice extension package for Umbraco 17 that adds reusable UFM filters and
 
 ## Installation
 
-1. Build the project:
+Install the NuGet package in the Umbraco site:
+
+```bash
+dotnet add package VNS.Umbraco.Extensions
+```
+
+Restart Umbraco and hard refresh the backoffice.
+
+The package is a Razor Class Library: its files are served from `/App_Plugins/VNS.Umbraco.Extensions` as static web assets and are never copied into the site's `wwwroot`. Removing the package (`dotnet remove package VNS.Umbraco.Extensions` and a rebuild) removes them too.
+
+### Moving from a copied App_Plugins folder
+
+Sites that had `App_Plugins/VNS.Umbraco.Extensions` copied into `wwwroot` by hand must delete that folder before installing the package. Otherwise the build fails because the same file exists both in the site and in the package. The error is `Microsoft.NET.Sdk.StaticWebAssets.targets: error : InvalidOperationException: Sequence contains more than one element`.
+
+## Development
 
 ```bash
 npm install
-npm run build
+npm run build   # src/ -> dist/ -> nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/
+npm run pack    # build + dotnet pack -> nuget/artifacts/VNS.Umbraco.Extensions.<version>.nupkg
 ```
 
-2. Copy `App_Plugins/VNS.Umbraco.Extensions` into your Umbraco app's `wwwroot/App_Plugins` folder.
-3. Restart Umbraco (or recycle the app pool).
-4. Hard refresh the browser cache.
-
-Build output is written to `dist/` and then synced to `App_Plugins/VNS.Umbraco.Extensions/`.
+To try a local package in a site, add `nuget/artifacts` as a package source in the site's `nuget.config`.
 
 ## Project Structure
 
 ```text
-src/
+src/                               TypeScript source
 ├── UFM/
 │   ├── Filters/
 │   │   ├── DateFormat/
-│   │   │   ├── date-format.filter.ts
-│   │   │   └── index.ts
 │   │   └── TagsFormat/
-│   │       ├── tags-format.filter.ts
-│   │       └── index.ts
 │   ├── Components/
 │   │   ├── Badge/
-│   │   │   ├── badge.component.ts
-│   │   │   ├── badge.element.ts
-│   │   │   └── index.ts
 │   │   └── Media/
-│   │       ├── media.component.ts
-│   │       ├── media.element.ts
-│   │       └── index.ts
+│   ├── shared/
 │   └── index.ts
 ├── manifests.ts
 └── umbraco-package.ts
+nuget/                             The NuGet package VNS.Umbraco.Extensions
+├── VNS.Umbraco.Extensions.csproj
+├── VNS.Umbraco.Extensions.sln
+├── docs/                          README.md, LICENSE.md and icon.png packed in the .nupkg
+└── wwwroot/App_Plugins/VNS.Umbraco.Extensions/
+    ├── umbraco-package.json       Umbraco package manifest (kept in git, not built)
+    └── ...                        Build output from src/
+scripts/sync-version.mjs
 ```
 
 ## UFM Usage
@@ -178,59 +188,54 @@ Behavior:
 
 Quick checks:
 
-1. Confirm `App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js` is deployed.
+1. Confirm `/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.json` opens in the browser on the site.
 2. Check browser console for JS errors.
 3. Verify `umbraco-package.js` is loaded in the network tab.
 4. Restart Umbraco and hard refresh.
 
 ## Versioning Strategy
 
-This repository uses Semantic Versioning:
+The versions follow Umbraco's, as in VNS.Harbor: `17.0.0` is for Umbraco 17.0.0 and newer. A fourth number (`17.0.0.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[17.0.0, 18.0.0)`.
 
-- Major: breaking changes
-- Minor: backward-compatible features
-- Patch: backward-compatible fixes
-
-### Version Commands
+There is one version: the one in `package.json`. The NuGet package, the Umbraco package manifest (shown under Packages in the backoffice) and the git tag always have the same one.
 
 ```bash
-npm run version:patch
-npm run version:minor
-npm run version:major
+npm run version:set 17.0.1   # sets the version and writes it everywhere
+npm run version:sync         # writes the version in package.json everywhere (every build does this)
 ```
 
-These commands:
+It is written to:
 
-1. Update `package.json`
-2. Sync the same version to `App_Plugins/VNS.Umbraco.Extensions/umbraco-package.json`
+1. `nuget/VNS.Umbraco.Extensions.csproj` (`<Version>`)
+2. `nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.json` (`version`, and `?v=<version>` on the bundle so browsers fetch the new code)
+
+`dotnet pack` refuses to make a package when the three differ, also when it is run without npm. `npm run release:tag` tags the commit `v<version>`.
 
 ## Release Flow
 
-1. Choose version bump (`patch`/`minor`/`major`):
+1. Set the version:
 
 ```bash
-npm run version:patch
+npm run version:set 17.0.1
 ```
 
-2. Build and verify:
+2. Build and pack:
 
 ```bash
 npm run release:check
 ```
 
-3. Commit and tag:
+3. Commit, tag and push:
 
 ```bash
 git add .
-git commit -m "release: vX.Y.Z"
-git tag vX.Y.Z
+git commit -m "release: v17.0.1"
+npm run release:tag          # tags v17.0.1; refuses if anything is uncommitted, the versions differ or the tag exists
+git push origin main v17.0.1
 ```
 
-4. Push code and tag:
+4. Create a GitHub release from the tag, and push the package to nuget.org:
 
 ```bash
-git push origin main
-git push origin vX.Y.Z
+dotnet nuget push nuget/artifacts/VNS.Umbraco.Extensions.17.0.1.nupkg --source https://api.nuget.org/v3/index.json --api-key <key>
 ```
-
-5. Create a GitHub release from tag `vX.Y.Z`.

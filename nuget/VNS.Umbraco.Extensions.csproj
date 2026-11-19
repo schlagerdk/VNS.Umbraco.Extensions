@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<!-- VNS Umbraco Extensions for Umbraco 17: UFM filters and components for the backoffice. Only static files: the
+       backoffice code in wwwroot, built from ../src with npm run build. -->
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageId>VNS.Umbraco.Extensions</PackageId>
+		<Version>17.0.0</Version>
+		<Authors>VNS</Authors>
+		<Description>UFM filters and components for the Umbraco backoffice: dateFormat, tagsFormat, badge and media.</Description>
+		<PackageTags>umbraco;umbraco-marketplace;vns;ufm</PackageTags>
+		<Copyright>2026</Copyright>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageProjectUrl>https://github.com/schlagerdk/VNS.Umbraco.Extensions</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/schlagerdk/VNS.Umbraco.Extensions</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<!-- The files in wwwroot are served from /App_Plugins/VNS.Umbraco.Extensions, where Umbraco finds its package
+		     manifest. They are never copied into the site, so removing the package removes them too. -->
+		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="docs\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="docs\icon.png" Pack="true" PackagePath="\" />
+		<None Include="docs\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	<ItemGroup>
+		<!-- Only for the version range: the package is for Umbraco 17 -->
+		<PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0, 18.0.0)" />
+	</ItemGroup>
+	<!-- package.json holds the version (npm run version:set / version:sync). A package is never packed with another
+	     version than package.json and umbraco-package.json, so the NuGet package, the backoffice and the git tag agree. -->
+	<Target Name="CheckVersion" BeforeTargets="GenerateNuspec">
+		<PropertyGroup>
+			<NpmVersion>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../package.json')), '"version"\s*:\s*"([^"]*)"').Groups[1].Value)</NpmVersion>
+			<UmbracoPackageVersion>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.json')), '"version"\s*:\s*"([^"]*)"').Groups[1].Value)</UmbracoPackageVersion>
+		</PropertyGroup>
+		<Error Condition="'$(NpmVersion)' != '$(Version)' Or '$(UmbracoPackageVersion)' != '$(Version)'" Text="The versions differ: NuGet $(Version), package.json $(NpmVersion), umbraco-package.json $(UmbracoPackageVersion). Run npm run version:sync." />
+	</Target>
+</Project>

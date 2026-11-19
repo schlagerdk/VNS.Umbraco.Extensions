@@ -1,0 +1,5 @@
+{
+	// The C# extension loads only the VNS.Umbraco.Extensions package in nuget/
+	"dotnet.defaultSolution": "nuget/VNS.Umbraco.Extensions.sln",
+	"dotnet.automaticallyCreateSolutionInWorkspace": false
+}

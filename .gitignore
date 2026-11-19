@@ -3,7 +3,10 @@ node_modules/
 *.log
 *.tmp
 *.swp
-.vscode/
 coverage/
 dist/
-App_Plugins/VNS.Umbraco.Extensions/dist/
+
+# The NuGet package's build output
+nuget/bin/
+nuget/obj/
+nuget/artifacts/

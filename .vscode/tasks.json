@@ -1,0 +1,41 @@
+{
+	// The NuGet package (VNS.Umbraco.Extensions) is in nuget/: the repository's root has no project of its own.
+	// Each task first builds the backoffice code (src/ -> nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions) with npm.
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "npm build",
+			"type": "npm",
+			"script": "build",
+			"problemMatcher": "$tsc",
+			"group": "build"
+		},
+		{
+			"label": "Debug",
+			"type": "process",
+			"command": "dotnet",
+			"args": ["build", "${workspaceFolder}/nuget/VNS.Umbraco.Extensions.csproj", "-c", "Debug"],
+			"dependsOn": "npm build",
+			"problemMatcher": "$msCompile",
+			"group": "build"
+		},
+		{
+			"label": "Release",
+			"type": "process",
+			"command": "dotnet",
+			"args": ["build", "${workspaceFolder}/nuget/VNS.Umbraco.Extensions.csproj", "-c", "Release"],
+			"dependsOn": "npm build",
+			"problemMatcher": "$msCompile",
+			"group": "build"
+		},
+		{
+			"label": "Pack Nuget",
+			"type": "process",
+			"command": "dotnet",
+			"args": ["pack", "${workspaceFolder}/nuget/VNS.Umbraco.Extensions.csproj", "-c", "Release", "-o", "${workspaceFolder}/nuget/artifacts"],
+			"dependsOn": "npm build",
+			"problemMatcher": "$msCompile",
+			"group": "build"
+		}
+	]
+}

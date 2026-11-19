@@ -5,24 +5,22 @@
 ### 1. Verify Build & Deployment
 
 ```bash
-# Build
-npm run build
+# Build and pack
+npm run pack
 
-# Check output folder exists
-ls -la App_Plugins/VNS.Umbraco.Extensions/dist/
+# Check the package exists
+ls -la nuget/artifacts/
 
 # Should show:
-# - umbraco-package.js
-# - manifests.js
-# - Filters/DateFormat.filter.js
-# - Components/badge/badge.component.js
+# - VNS.Umbraco.Extensions.<version>.nupkg
 ```
 
-### 2. Copy to Umbraco
+### 2. Install in Umbraco
+
+Add `nuget/artifacts` from this repository as a package source in the site's `nuget.config`, then:
 
 ```bash
-# Copy the entire plugin folder
-cp -r App_Plugins/VNS.Umbraco.Extensions /path/to/your/umbraco/wwwroot/App_Plugins/
+dotnet add package VNS.Umbraco.Extensions --version <version>
 
 # Then restart Umbraco (recycle app pool or restart server)
 ```
@@ -115,8 +113,8 @@ Expected:
 ### Plugin Not Loading
 
 ```bash
-# 1. Verify files exist
-ls -la /path/to/umbraco/wwwroot/App_Plugins/VNS.Umbraco.Extensions/dist/
+# 1. Verify the package is served
+curl -I https://your-site/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.json
 
 # 2. Check console in browser (F12 > Console)
 # Look for messages like: "VNS.Umbraco.Extensions" or UFM errors
@@ -172,20 +170,16 @@ ${isFree ? 'show' : 'hide'}       // Should show 'show' if property is true
 
 ## File Locations
 
+The files are not in the site's `wwwroot`: they are served from the NuGet package at
+
 ```
-Umbraco installation:
-wwwroot/
-└── App_Plugins/
-    └── VNS.Umbraco.Extensions/
-        ├── dist/                    (compiled output)
-        │   ├── umbraco-package.js
-        │   ├── manifests.js
-        │   ├── Filters/
-        │   │   └── DateFormat.filter.js
-        │   └── Components/badge/
-        │       ├── badge.component.js
-        │       └── badge.element.js
-        └── umbraco-package.json     (Umbraco manifest)
+/App_Plugins/VNS.Umbraco.Extensions/
+├── umbraco-package.json     (Umbraco manifest)
+├── umbraco-package.js
+├── manifests.js
+└── UFM/
+    ├── Filters/
+    └── Components/
 ```
 
 ## Console Commands for Testing
@@ -224,7 +218,7 @@ dateFormat('2026-04-24', 'dd-MM-yyyy')
 
 1. Verify plugin folder path on server (might be different)
 2. Check file permissions on server
-3. Verify App_Plugins folder exists on server
+3. Verify the package is installed (`dotnet list package`) and the site was rebuilt
 4. Restart app pool on server
 5. Check web server logs for errors
 
