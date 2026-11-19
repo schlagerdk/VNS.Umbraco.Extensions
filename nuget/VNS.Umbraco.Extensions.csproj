@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
-	<!-- VNS Umbraco Extensions for Umbraco 17: UFM filters and components for the backoffice. Only static files: the
+	<!-- VNS Umbraco Extensions for Umbraco 18: UFM filters and components for the backoffice. Only static files: the
        backoffice code in wwwroot, built from ../src with npm run build. -->
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>VNS.Umbraco.Extensions</PackageId>
-		<Version>17.0.0</Version>
+		<Version>18.0.0</Version>
 		<Authors>VNS</Authors>
 		<Description>UFM filters and components for the Umbraco backoffice: dateFormat, tagsFormat, badge and media.</Description>
 		<PackageTags>umbraco;umbraco-marketplace;vns;ufm</PackageTags>
@@ -28,8 +28,8 @@
 		<None Include="docs\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<ItemGroup>
-		<!-- Only for the version range: the package is for Umbraco 17 -->
-		<PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0, 18.0.0)" />
+		<!-- Only for the version range: the package is for Umbraco 18 -->
+		<PackageReference Include="Umbraco.Cms.Core" Version="[18.0.0, 19.0.0)" />
 	</ItemGroup>
 	<!-- package.json holds the version (npm run version:set / version:sync). A package is never packed with another
 	     version than package.json and umbraco-package.json, so the NuGet package, the backoffice and the git tag agree. -->

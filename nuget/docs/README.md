@@ -1,6 +1,6 @@
 # VNS Umbraco Extensions
 
-UFM filters and components for the Umbraco 17 backoffice. Its versions follow Umbraco's: VNS.Umbraco.Extensions 17.0.0 is for Umbraco 17.0.0 and newer, and a fourth number (17.0.0.1) is a fix of the package for the same Umbraco.
+UFM filters and components for the Umbraco 18 backoffice. Its versions follow Umbraco's: VNS.Umbraco.Extensions 18.0.0 is for Umbraco 18.0.0 and newer, and a fourth number (18.0.0.1) is a fix of the package for the same Umbraco.
 
 - `dateFormat` filter: dates as `dd-MM-yyyy`, `HH:mm`, `monthYear`, `weekNumber` and more
 - `tagsFormat` filter: tags as readable text, stored as JSON or CSV
@@ -37,7 +37,7 @@ All the options are described at [github.com/schlagerdk/VNS.Umbraco.Extensions](
 
 ## Requirements
 
-- Umbraco 17, .NET 10
+- Umbraco 18, .NET 10
 
 ## License
 

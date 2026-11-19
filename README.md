@@ -1,6 +1,6 @@
-# VNS Umbraco Extensions (Umbraco 17)
+# VNS Umbraco Extensions (Umbraco 18)
 
-A backoffice extension package for Umbraco 17 that adds reusable UFM filters and components.
+A backoffice extension package for Umbraco 18 that adds reusable UFM filters and components.
 
 ## Features
 
@@ -195,12 +195,12 @@ Quick checks:
 
 ## Versioning Strategy
 
-The versions follow Umbraco's, as in VNS.Harbor: `17.0.0` is for Umbraco 17.0.0 and newer. A fourth number (`17.0.0.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[17.0.0, 18.0.0)`.
+The versions follow Umbraco's, as in VNS.Harbor: `18.0.0` is for Umbraco 18.0.0 and newer. A fourth number (`18.0.0.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[18.0.0, 19.0.0)`.
 
 There is one version: the one in `package.json`. The NuGet package, the Umbraco package manifest (shown under Packages in the backoffice) and the git tag always have the same one.
 
 ```bash
-npm run version:set 17.0.1   # sets the version and writes it everywhere
+npm run version:set 18.0.1   # sets the version and writes it everywhere
 npm run version:sync         # writes the version in package.json everywhere (every build does this)
 ```
 
@@ -216,7 +216,7 @@ It is written to:
 1. Set the version:
 
 ```bash
-npm run version:set 17.0.1
+npm run version:set 18.0.1
 ```
 
 2. Build and pack:
@@ -229,13 +229,13 @@ npm run release:check
 
 ```bash
 git add .
-git commit -m "release: v17.0.1"
-npm run release:tag          # tags v17.0.1; refuses if anything is uncommitted, the versions differ or the tag exists
-git push origin main v17.0.1
+git commit -m "release: v18.0.1"
+npm run release:tag          # tags v18.0.1; refuses if anything is uncommitted, the versions differ or the tag exists
+git push origin main v18.0.1
 ```
 
 4. Create a GitHub release from the tag, and push the package to nuget.org:
 
 ```bash
-dotnet nuget push nuget/artifacts/VNS.Umbraco.Extensions.17.0.1.nupkg --source https://api.nuget.org/v3/index.json --api-key <key>
+dotnet nuget push nuget/artifacts/VNS.Umbraco.Extensions.18.0.1.nupkg --source https://api.nuget.org/v3/index.json --api-key <key>
 ```

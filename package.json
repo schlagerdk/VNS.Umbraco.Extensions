@@ -1,8 +1,8 @@
 {
 	"name": "vns-umbraco-extensions-ufm",
-	"version": "17.0.0",
+	"version": "18.0.0",
 	"private": true,
-	"description": "Umbraco 17 backoffice extension package with custom UFM filters and components (dateFormat, tagsFormat, badge, media), shipped as the NuGet package VNS.Umbraco.Extensions.",
+	"description": "Umbraco 18 backoffice extension package with custom UFM filters and components (dateFormat, tagsFormat, badge, media), shipped as the NuGet package VNS.Umbraco.Extensions.",
 	"type": "module",
 	"scripts": {
 		"clean": "rm -rf dist nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/UFM nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js.map nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/manifests.js nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/manifests.js.map",
@@ -16,7 +16,7 @@
 		"release:tag": "node scripts/release-tag.mjs"
 	},
 	"devDependencies": {
-		"@umbraco-cms/backoffice": "^17.0.0",
+		"@umbraco-cms/backoffice": "^18.0.0",
 		"typescript": "^5.8.3"
 	}
 }
