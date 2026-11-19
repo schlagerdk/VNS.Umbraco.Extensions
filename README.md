@@ -199,7 +199,7 @@ Quick checks:
 
 ## Versioning Strategy
 
-The versions follow Umbraco's, as in VNS.Harbor: `18.0.0` is for Umbraco 18.0.0 and newer. A fourth number (`18.0.0.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[18.0.0, 19.0.0)`.
+The versions follow Umbraco's, as in VNS.Harbor: `18.3.0` is for Umbraco 18.3.0 and newer. A fourth number (`18.3.0.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[18.3.0, 19.0.0)`.
 
 There is one version: the one in `package.json`. The NuGet package, the Umbraco package manifest (shown under Packages in the backoffice) and the git tag always have the same one.
 

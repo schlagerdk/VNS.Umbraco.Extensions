@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>VNS.Umbraco.Extensions</PackageId>
-		<Version>18.0.0.1</Version>
+		<Version>18.3.0</Version>
 		<Authors>VNS</Authors>
 		<Description>UFM filters and components for the Umbraco backoffice: dateFormat, tagsFormat, badge and media.</Description>
 		<PackageTags>umbraco;umbraco-marketplace;vns;ufm</PackageTags>
@@ -34,7 +34,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<!-- Only for the version range: the package is for Umbraco 18 -->
-		<PackageReference Include="Umbraco.Cms.Core" Version="[18.0.0, 19.0.0)" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[18.3.0, 19.0.0)" />
 	</ItemGroup>
 	<!-- package.json holds the version (npm run version:set / version:sync). A package is never packed with another
 	     version than package.json and umbraco-package.json, so the NuGet package, the backoffice and the git tag agree. -->
