@@ -1,6 +1,6 @@
 {
 	"name": "vns-umbraco-extensions-ufm",
-	"version": "18.3.0",
+	"version": "18.3.0.1",
 	"private": true,
 	"description": "Umbraco 18 backoffice extension package with custom UFM filters and components (dateFormat, tagsFormat, badge, media), shipped as the NuGet package VNS.Umbraco.Extensions.",
 	"type": "module",

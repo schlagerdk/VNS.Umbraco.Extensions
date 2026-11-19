@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>VNS.Umbraco.Extensions</PackageId>
-		<Version>18.3.0</Version>
+		<Version>18.3.0.1</Version>
 		<Authors>VNS</Authors>
 		<Description>UFM filters and components for the Umbraco backoffice: dateFormat, tagsFormat, badge and media.</Description>
 		<PackageTags>umbraco;umbraco-marketplace;vns;ufm</PackageTags>

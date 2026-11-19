@@ -17,7 +17,7 @@ dotnet add package VNS.Umbraco.Extensions
 
 Restart the site and hard refresh the backoffice. Nothing else needs to be set up.
 
-The package's files are served from `/App_Plugins/VNS.Umbraco.Extensions`. They are not copied into the site's project, but `dotnet publish` copies them into the publish folder's `wwwroot/App_Plugins`, as with all static web assets. When the package is removed, a publish into a folder that is not cleaned leaves them there: delete `wwwroot/App_Plugins/VNS.Umbraco.Extensions` (and `VNS.Umbraco.Extensions.dll` from 18.0.0) from the publish folder. The package has no assembly, so nothing else is left. A site that had the files copied into `wwwroot/App_Plugins/VNS.Umbraco.Extensions` by hand must delete that folder before installing the package.
+The browser gets the package's files at the URL `/App_Plugins/VNS.Umbraco.Extensions/...`. On disk, they are not copied into the site's project: in development they are served from the NuGet package cache. `dotnet publish` copies them into the publish folder, at `<publish folder>/wwwroot/App_Plugins/VNS.Umbraco.Extensions/`, as with all static web assets. When the package is removed, a publish into a folder that is not cleaned leaves them there: delete `wwwroot/App_Plugins/VNS.Umbraco.Extensions` (and `VNS.Umbraco.Extensions.dll` from 18.0.0) from the publish folder. The package has no assembly, so nothing else is left. A site that had the files copied into `wwwroot/App_Plugins/VNS.Umbraco.Extensions` by hand must delete that folder before installing the package.
 
 ## Usage
 
