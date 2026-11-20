@@ -33,7 +33,7 @@ Sites that had `App_Plugins/VNS.Umbraco.Extensions` copied into `wwwroot` by han
 
 ```bash
 npm install
-npm run build   # src/ -> dist/ -> nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/
+npm run build   # src/ -> nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/
 npm run pack    # build + dotnet pack -> nuget/artifacts/VNS.Umbraco.Extensions.<version>.nupkg
 ```
 

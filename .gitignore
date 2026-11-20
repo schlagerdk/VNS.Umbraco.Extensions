@@ -4,7 +4,6 @@ node_modules/
 *.tmp
 *.swp
 coverage/
-dist/
 
 # The NuGet package's build output
 nuget/bin/

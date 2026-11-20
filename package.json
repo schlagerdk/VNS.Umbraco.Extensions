@@ -5,12 +5,11 @@
 	"description": "Umbraco 18 backoffice extension package with custom UFM filters and components (dateFormat, tagsFormat, badge, media), shipped as the NuGet package VNS.Umbraco.Extensions.",
 	"type": "module",
 	"scripts": {
-		"clean": "rm -rf dist nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/UFM nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js.map nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/manifests.js nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/manifests.js.map",
-		"build": "npm run version:sync && npm run clean && tsc -p tsconfig.json && npm run sync:wwwroot",
+		"clean": "rm -rf nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/UFM nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.js.map nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/manifests.js nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/manifests.js.map",
+		"build": "npm run version:sync && npm run clean && tsc -p tsconfig.json",
 		"watch": "tsc -p tsconfig.json --watch",
 		"version:sync": "node scripts/sync-version.mjs",
 		"release:check": "npm run pack",
-		"sync:wwwroot": "mkdir -p nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions && cp -R dist/* nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/",
 		"pack": "npm run build && dotnet pack nuget/VNS.Umbraco.Extensions.csproj -c Release -o nuget/artifacts",
 		"version:set": "node scripts/sync-version.mjs",
 		"release:tag": "node scripts/release-tag.mjs"
