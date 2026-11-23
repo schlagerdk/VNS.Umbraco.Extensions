@@ -200,47 +200,4 @@ Quick checks:
 
 ## Versioning Strategy
 
-The versions follow Umbraco's, as in VNS.Harbor: `18.3.2` is for Umbraco 18.3.2 and newer. A fourth number (`18.3.2.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[18.3.2, 19.0.0)`.
-
-There is one version: the one in `package.json`. The NuGet package, the Umbraco package manifest (shown under Packages in the backoffice) and the git tag always have the same one.
-
-```bash
-npm run version:set 18.0.1   # sets the version and writes it everywhere
-npm run version:sync         # writes the version in package.json everywhere (every build does this)
-```
-
-It is written to:
-
-1. `nuget/VNS.Umbraco.Extensions.csproj` (`<Version>`)
-2. `nuget/wwwroot/App_Plugins/VNS.Umbraco.Extensions/umbraco-package.json` (`version`, and `?v=<version>` on the bundle so browsers fetch the new code)
-
-`dotnet pack` refuses to make a package when the three differ, also when it is run without npm. `npm run release:tag` tags the commit `v<version>`.
-
-## Release Flow
-
-1. Move the entries under `Unreleased` in `CHANGELOG.md` to a heading with the new version, then set the version:
-
-```bash
-npm run version:set 18.0.1
-```
-
-2. Build and pack:
-
-```bash
-npm run release:check
-```
-
-3. Commit, tag and push:
-
-```bash
-git add .
-git commit -m "release: v18.0.1"
-npm run release:tag          # tags v18.0.1; refuses if anything is uncommitted, the versions differ or the tag exists
-git push origin main v18.0.1
-```
-
-4. Create a GitHub release from the tag, and push the package to nuget.org:
-
-```bash
-dotnet nuget push nuget/artifacts/VNS.Umbraco.Extensions.18.0.1.nupkg --source https://api.nuget.org/v3/index.json --api-key <key>
-```
+The versions follow Umbraco's: `18.3.2` is for Umbraco 18.3.2 and newer. A fourth number (`18.3.2.1`) is a fix of the package for the same Umbraco. The NuGet package allows Umbraco `[18.3.2, 19.0.0)`. The changes in each version are in `CHANGELOG.md`.
