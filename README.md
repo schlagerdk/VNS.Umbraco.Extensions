@@ -62,6 +62,7 @@ nuget/                             The NuGet package VNS.Umbraco.Extensions
     ├── umbraco-package.json       Umbraco package manifest (kept in git, not built)
     └── ...                        Build output from src/
 scripts/sync-version.mjs
+CHANGELOG.md                       Changes per version (Unreleased until it is released)
 ```
 
 ## UFM Usage
@@ -217,7 +218,7 @@ It is written to:
 
 ## Release Flow
 
-1. Set the version:
+1. Move the entries under `Unreleased` in `CHANGELOG.md` to a heading with the new version, then set the version:
 
 ```bash
 npm run version:set 18.0.1
